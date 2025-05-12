@@ -5,7 +5,7 @@ from catalog import views
 app_name='catalog'
 urlpatterns = [
     path('', views.home, name="home"),
-    path('about', views.about, name="about"),
-    path('contacts', views.contacts, name="contacts"),
-    path('feedback', views.feedback, name="feedback"),
+    path('about/', views.about, name="about"),
+    path('contacts/', views.contacts, name="contacts"),
+    path('feedback/', views.feedback, name="feedback"),
 ]
