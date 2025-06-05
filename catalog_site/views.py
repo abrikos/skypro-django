@@ -1,17 +1,21 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from catalog_site.models import Product, Contacts
+
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    products = Product.objects.all()
+    return render(request, 'home.html', {'products':products})
 
 
 def about(request):
     return render(request, 'about.html')
 
 def contacts(request):
-    return render(request, 'contacts.html')
+    contacts = Contacts.objects.get()
+    return render(request, 'contacts.html', {'contacts':contacts})
 
 def feedback(request):
     if request.method == 'POST':
@@ -23,3 +27,6 @@ def feedback(request):
         # Здесь мы просто возвращаем простой ответ
         return HttpResponse(f"Спасибо, {name}! Ваше сообщение получено.")
     return render(request, 'feedback.html')
+from django.shortcuts import render
+
+# Create your views here.
