@@ -1,0 +1,16 @@
+{% extends 'base.html'%}
+{%block title%} Good {%endblock%}
+{%block content%}
+<strong>Category: {{product.category.name}}</strong>
+<h1>{{product.name}}</h1>
+<i>{{product.desc}}</i>
+<div class="row">
+    <div class="col-sm">
+        <img src="{{product.image.url}}" class="img-thumbnail d-block"/>
+    </div>
+    <div class="col-sm">
+        <h3>${{product.price}}</h3>
+    </div>
+</div>
+
+{%endblock%}

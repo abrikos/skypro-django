@@ -2,10 +2,12 @@ from django.db import models
 
 # Create your models here.
 class Contacts(models.Model):
+    """Contacts model"""
     email = models.CharField(max_length=150, verbose_name='Email')
     phone = models.CharField(max_length=150, verbose_name='Phone')
 
 class Category(models.Model):
+    """Category model"""
     name = models.CharField(max_length=150, verbose_name='Name')
     desc = models.CharField(max_length=150, verbose_name='Description')
     def __str__(self):
@@ -13,6 +15,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    """Product model"""
     name = models.CharField(max_length=150, verbose_name='Name')
     desc = models.CharField(max_length=150, verbose_name='Description')
     image = models.ImageField(upload_to='images/', verbose_name='Image')
