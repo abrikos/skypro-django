@@ -1,0 +1,6 @@
+poetry.lock
+.idea
+.venv
+__pycache__
+.env
+*.sqlite3
