@@ -1,0 +1,1 @@
+[{"model": "catalog_site.category", "pk": 1, "fields": {"name": "C1", "desc": "C1 cat"}}, {"model": "catalog_site.category", "pk": 2, "fields": {"name": "C2", "desc": "C2 cat"}}]
