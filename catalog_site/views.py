@@ -2,28 +2,35 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from catalog_site.models import Product, Contacts
-
+from django.views.generic import ListView, DetailView, TemplateView
 
 # Create your views here.
-def product(request, id):
-    """View product page"""
-    product = Product.objects.get(id=id)
-    print(product.image)
-    return render(request, 'product.pug', {'product':product})
+class ProductListView(ListView):
+    """Products list"""
+    model = Product
+    template_name = 'catalog.pug'
 
-def home(request):
-    """Home page"""
-    products = Product.objects.all()
-    return render(request, 'home.html', {'products':products})
+class ProductDetailView(DetailView):
+    """Product detail"""
+    model = Product
+    template_name = 'product_detail.pug'
 
-def about(request):
-    """About page"""
-    return render(request, 'about.html')
+class ContactsView(TemplateView):
+    """Contacts view"""
+    template_name='contacts.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['contacts']= Contacts.objects.get()
+        return context
 
-def contacts(request):
-    """Contacts page"""
-    contacts = Contacts.objects.get()
-    return render(request, 'contacts.html', {'contacts':contacts})
+class HomeView(TemplateView):
+    """Home view"""
+    template_name='home.html'
+
+class AboutView(TemplateView):
+    """About view"""
+    template_name='about.html'
+
 
 def feedback(request):
     """Accept feedback page"""

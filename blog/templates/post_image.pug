@@ -1,0 +1,6 @@
+{% load static %}
+{%if post.image %}
+img.img-thumbnail(src="{{post.image.url}}")
+{%else%}
+img.img-thumbnail(src="{% static 'no-image-icon.png' %}")
+{%endif%}
