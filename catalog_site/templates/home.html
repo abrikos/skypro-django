@@ -6,7 +6,7 @@
     <p class="lead">Skystore - это отличный вариант хранения ваших плагинов и примеров кода, который вы бы хотели
         продать</p>
 </div>
-
+{% load static %}
 <div class="row text-center">
     {% for product in products %}
     <div class="col-3">
@@ -15,8 +15,13 @@
                 <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
             </div>
             <div class="card-body">
+                {%if product.image %}
+                <img src="{{product.image.url}}" class="img-thumbnail"/>
+                {%else%}
+                <img src="{% static 'no-image-icon.png' %}" class="img-thumbnail"/>
+                {%endif%}
                 <h1 class="card-title pricing-card-title">$ {{product.price}}</h1>
-                {{product.desc}}
+                {{product.desc|truncatechars:100}}
                 <br/>
                 <a href="{%url 'product' product.id%}">View</a>
                 <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
