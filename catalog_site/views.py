@@ -9,7 +9,7 @@ def product(request, id):
     """View product page"""
     product = Product.objects.get(id=id)
     print(product.image)
-    return render(request, 'product.html', {'product':product})
+    return render(request, 'product.pug', {'product':product})
 
 def home(request):
     """Home page"""

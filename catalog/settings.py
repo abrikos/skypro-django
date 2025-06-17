@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +31,6 @@ SECRET_KEY = 'django-insecure-jm&)05%&3+8k#n(*z=s=qn%if7=0=k6!bmnopawcqsxd8!i^j@
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -60,7 +60,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
-        'APP_DIRS': True,
+        'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
@@ -68,12 +68,18 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'catalog_site.main_menu.main_menu_f'
             ],
+            "loaders": [
+                (
+                    "pypugjs.ext.django.Loader",
+                    ("django.template.loaders.filesystem.Loader", "django.template.loaders.app_directories.Loader",),
+                )
+            ],
+            "builtins": ["pypugjs.ext.django.templatetags", ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'catalog.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -87,7 +93,6 @@ DATABASES = {
         'PORT': os.getenv('DATABASE_PORT', default='5432'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -107,7 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -118,7 +122,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
