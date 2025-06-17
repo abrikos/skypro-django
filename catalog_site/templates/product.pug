@@ -1,0 +1,28 @@
+{% extends 'base.html'%}
+{%block title%} Good {%endblock%}
+{%block content%}
+{% load static %}
+div.card
+    div.card-header
+        h4.my-0.font-weight-normal {{ product.name }}
+    div.card-body
+        {%if product.image %}
+        img.img-thumbnail(src="{{product.image.url}}")
+        {%else%}
+        img.img-thumbnail(src="{% static 'no-image-icon.png' %}")
+        {%endif%}
+
+        br
+        strong Price:
+        span $ {{product.price}}
+        br
+        strong Category:
+        span {{product.category.name}}
+        br
+        strong Description:
+        span {{product.desc}}
+        br
+
+        button.btn.btn-lg.btn-block.btn-outline-primary Купить
+
+{%endblock%}
