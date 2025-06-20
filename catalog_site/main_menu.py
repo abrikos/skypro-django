@@ -1,7 +1,9 @@
 def main_menu_f(request):
     """Define main menu links for context"""
     return {"main_menu":[
-        {'url':'home', 'title':'Home'},
-        {'url':'about', 'title':'About'},
-        {'url':'contacts', 'title':'Contacts'},
+        {'route':'/', 'title':'Home'},
+        {'route':'catalog_list', 'title':'Catalog'},
+        {'route':'blog_posts', 'title':'Blog'},
+        {'route':'about', 'title':'About'},
+        {'route':'contacts', 'title':'Contacts'},
     ]}

@@ -25,12 +25,15 @@ from catalog_site import views
 app_name='catalog'
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name="home"),
-    path('home/', views.home, name="home"),
-    path('product/<int:id>/', views.product, name="product"),
-    path('about/', views.about, name="about"),
-    path('contacts/', views.contacts, name="contacts"),
+    path('', views.HomeView.as_view(), name="/"),
+    path('about/', views.AboutView.as_view(), name="about"),
     path('feedback/', views.feedback, name="feedback"),
+
+    path('contacts/', views.ContactsView.as_view(), name="contacts"),
+
+    path('blog/', include('blog.urls')),
+    path('catalog/', include('catalog_site.urls')),
+
 
 ]
 
