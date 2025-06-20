@@ -1,14 +1,16 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
 
-from catalog_site.models import Product, Contacts
-from django.views.generic import ListView, DetailView, TemplateView
+from catalog.models import Product, Contacts
+from django.views.generic import ListView, DetailView, TemplateView, DeleteView, CreateView, UpdateView
+from . import forms
 
 # Create your views here.
 class ProductListView(ListView):
     """Products list"""
     model = Product
-    template_name = 'catalog.pug'
+    template_name = 'list.pug'
 
 class ProductDetailView(DetailView):
     """Product detail"""
@@ -31,14 +33,35 @@ class AboutView(TemplateView):
     """About view"""
     template_name='about.html'
 
+class CatalogDeleteView(DeleteView):
+    """Products delete"""
+    model = Product
+    template_name = 'product_detail.pug'
+    success_url = reverse_lazy('catalog_list')
+
+class CatalogCreateView(CreateView):
+    """Add Product"""
+    model = Product
+    form_class = forms.CatalogProductForm
+    template_name = 'product_form.pug'
+    success_url = reverse_lazy('catalog_list')
+
+class CatalogUpdateView(UpdateView):
+    """Product update"""
+    model = Product
+    form_class = forms.CatalogProductForm
+    template_name = 'product_form.pug'
+    def get_success_url(self):
+        return reverse_lazy('product_detail', kwargs={'pk': self.object.pk})
+
 
 def feedback(request):
     """Accept feedback page"""
-    if request.method == 'POST':
+    if request.method == 'Product':
         # Получение данных из формы
-        print(request.POST)
-        name = request.POST.get('name')
-        message = request.POST.get('message')
+        print(request.Product)
+        name = request.Product.get('name')
+        message = request.Product.get('message')
         # Обработка данных (например, сохранение в БД, отправка email и т. д.)
         # Здесь мы просто возвращаем простой ответ
         return HttpResponse(f"Спасибо, {name}! Ваше сообщение получено.")

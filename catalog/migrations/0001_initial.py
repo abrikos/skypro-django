@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('price', models.FloatField(max_length=150, verbose_name='Price')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='CreatedAt')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='UpdatedAt')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to='catalog_site.category')),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to='catalog.category')),
             ],
             options={
                 'verbose_name': 'Product',

@@ -7,7 +7,7 @@ small {{post.created_at}}
 br
 small Views: {{post.views}}
 div.d-flex
-    {%include 'post_image.pug'%}
+    {%include 'image_thumb.pug' with image=post.image%}
     {{post.text|linebreaksbr}}
 {% if request.resolver_match.url_name == 'blog_delete' %}
 form.alert.alert-danger(method="post") {% csrf_token %}

@@ -7,7 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
 from dotenv import load_dotenv
-
+from . import forms
 load_dotenv()
 
 # Create your views here.
@@ -23,7 +23,13 @@ class BlogDetailView(DetailView):
     model = Post
     template_name = 'view.pug'
 
-    def get_context_data(self, **kwargs):
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        obj.views += 1
+        obj.save()
+        return obj
+
+    def get_context_dataBAK(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['post'].views += 1
         context['post'].save()
@@ -50,14 +56,14 @@ class BlogDeleteView(DeleteView):
 class BlogCreateView(CreateView):
     """Add Post"""
     model = Post
+    form_class = forms.BlogPostForm
     template_name = 'add.pug'
-    fields = ['header', 'text', 'image']
     success_url = reverse_lazy('blog_posts')
 
 class BlogUpdateView(UpdateView):
     """Post update"""
     model = Post
-    fields = ['header', 'text', 'image']
+    form_class = forms.BlogPostForm
     template_name = 'add.pug'
     def get_success_url(self):
         return reverse_lazy('blog_view', kwargs={'pk': self.object.pk})

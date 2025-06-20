@@ -1,0 +1,17 @@
+.image-container{
+position: relative;
+    height: 200px;
+    width: 200px
+}
+img.img-thumbnail{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+        max-height: 200px;
+        max-width: 200px;
+        overflow: hidden;
+    }
+.errorlist{
+    background: red;
+}
