@@ -1,0 +1,12 @@
+{% extends 'base.html'%}
+{%block title%}{%if request.resolver_match.url_name == 'product_update'%}Update product{%else%}Add product{%endif%}
+{%endblock%}
+{%block content%}
+{% load static %}
+form(method="post" enctype="multipart/form-data")
+    {% csrf_token %}
+    {{ form.as_p }}
+    div {%include 'image_thumb.pug' with image=product.image%}
+    {{ form.non_field_errors }}
+    button.btn.btn-lg.btn-block.btn-outline-primary(type="submit") Send
+{%endblock%}

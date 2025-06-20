@@ -12,7 +12,7 @@ div
             span {{post.views}}
             span {{post.created_at}}
         div.card-body
-            {%include 'post_image.pug'%}
+            {%include 'image_thumb.pug' with image=post.image%}
             {{post.text|truncatechars:100}}
         div.card-footer {%include 'post_menu.pug'%}
 
