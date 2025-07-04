@@ -1,0 +1,7 @@
+{% load static %}
+div.image-container
+    {%if image %}
+    img.img-thumbnail(src="{{image.url}}")
+    {%else%}
+    img.img-thumbnail(src="{% static 'no-image-icon.png' %}")
+    {%endif%}
