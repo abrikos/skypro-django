@@ -28,6 +28,9 @@ class ContactsView(TemplateView):
 class HomeView(TemplateView):
     """Home view"""
     template_name='home.html'
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        return render(request, 'home.html')
 
 class AboutView(TemplateView):
     """About view"""
