@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 
 # Register your models here.
 from .models import Product, Category, Contacts
@@ -17,3 +18,6 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Contacts)
 class ContactsAdmin(admin.ModelAdmin):
     list_display = ('id','email','phone')
+
+
+admin.site.register(get_user_model())

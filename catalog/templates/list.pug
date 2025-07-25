@@ -2,6 +2,7 @@
 {%block title%} Products list {%endblock%}
 {%block content%}
 {% load static %}
+
 div
     a(href="{%url 'catalog_add'%}") Add product
 div.d-flex.flex-wrap
@@ -21,8 +22,16 @@ div.d-flex.flex-wrap
             strong Description:
             span {{product.desc|truncatechars:100}}
             br
-            a(href="{%url 'product_update' product.id%}") Update
-            a(href="{%url 'product_delete' product.id%}") Delete
             button.btn.btn-lg.btn-block.btn-outline-primary Купить
+            br
+            {%if product.owner == user%}
+            a.p-2.btn.btn-outline-primary(href="{%url 'product_update' product.id%}") Update
+            {%endif%}
+            {% if "catalog.can_delete_product" in perms or product.owner == user %}
+            form(action="{%url 'product_delete' product.id%}" method="post")
+                {% csrf_token %}
+                button.p-2.btn.btn-outline-primary(type="submit") Delete
+
+            {%endif%}
     {%endfor%}
 {%endblock%}
