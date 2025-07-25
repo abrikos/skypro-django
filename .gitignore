@@ -4,3 +4,5 @@ poetry.lock
 __pycache__
 .env
 *.sqlite3
+media
+my_site/static

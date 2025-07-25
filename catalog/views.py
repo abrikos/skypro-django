@@ -1,11 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, TemplateView, DeleteView, CreateView, UpdateView
 
 from catalog.models import Product, Contacts
-from django.views.generic import ListView, DetailView, TemplateView, DeleteView, CreateView, UpdateView
 from . import forms
+
 
 # Create your views here.
 class ProductListView(ListView):
@@ -13,35 +14,45 @@ class ProductListView(ListView):
     model = Product
     template_name = 'list.pug'
 
+
 class ProductDetailView(DetailView):
     """Product detail"""
     model = Product
     template_name = 'product_detail.pug'
 
+
 class ContactsView(TemplateView):
     """Contacts view"""
-    template_name='contacts.html'
+    template_name = 'contacts.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['contacts']= Contacts.objects.get()
+        context['contacts'] = Contacts.objects.get()
         return context
+
 
 class HomeView(TemplateView):
     """Home view"""
-    template_name='home.html'
+    template_name = 'home.html'
+
     def get(self, request, *args, **kwargs):
         user = request.user
         return render(request, 'home.html')
 
+
 class AboutView(TemplateView):
     """About view"""
-    template_name='about.html'
+    template_name = 'about.html'
+
 
 class CatalogDeleteView(LoginRequiredMixin, DeleteView):
     """Products delete"""
-    model = Product
-    template_name = 'product_detail.pug'
-    success_url = reverse_lazy('catalog_list')
+    def post(self, request, pk):
+        product = get_object_or_404(Product, id=pk)
+        if product.owner == request.user or request.user.has_perm('catalog.can_delete_product'):
+            product.delete()
+            return redirect('catalog_list')
+        return HttpResponseForbidden("У вас нет прав для удаления продукта.")
 
 class CatalogCreateView(LoginRequiredMixin, CreateView):
     """Add Product"""
@@ -50,11 +61,25 @@ class CatalogCreateView(LoginRequiredMixin, CreateView):
     template_name = 'product_form.pug'
     success_url = reverse_lazy('catalog_list')
 
-class CatalogUpdateView(LoginRequiredMixin, UpdateView):
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+
+class ModeratorRequiredMixin:
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.owner == self.request.user or request.user.groups.filter(name='Product moderator').exists():
+            return super().dispatch(request, *args, **kwargs)
+        return HttpResponseForbidden("You are not Moderator or Owner.")
+
+
+class CatalogUpdateView(LoginRequiredMixin, ModeratorRequiredMixin, UpdateView):
     """Product update"""
     model = Product
     form_class = forms.CatalogProductForm
     template_name = 'product_form.pug'
+
     def get_success_url(self):
         return reverse_lazy('product_detail', kwargs={'pk': self.object.pk})
 
@@ -70,6 +95,8 @@ def feedback(request):
         # Здесь мы просто возвращаем простой ответ
         return HttpResponse(f"Спасибо, {name}! Ваше сообщение получено.")
     return render(request, 'feedback.html')
+
+
 from django.shortcuts import render
 
 # Create your views here.
