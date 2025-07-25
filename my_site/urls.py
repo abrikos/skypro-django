@@ -23,7 +23,7 @@ from catalog import views
 app_name='catalog'
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.HomeView.as_view(), name="/"),
+    path('', views.HomeView.as_view(), name="home"),
     path('about/', views.AboutView.as_view(), name="about"),
     path('feedback/', views.feedback, name="feedback"),
 
@@ -31,6 +31,7 @@ urlpatterns = [
 
     path('blog/', include('blog.urls')),
     path('catalog/', include('catalog.urls')),
+    path('users/', include('users.urls')),
 
 
 ]
