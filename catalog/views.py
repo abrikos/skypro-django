@@ -6,6 +6,9 @@ from django.views.generic import ListView, DetailView, TemplateView, DeleteView,
 
 from catalog.models import Product, Contacts
 from . import forms
+from django.core.cache import cache
+
+from .services import ProductService
 
 
 # Create your views here.
@@ -14,12 +17,34 @@ class ProductListView(ListView):
     model = Product
     template_name = 'list.pug'
 
+    def get_queryset(self):
+        queryset = cache.get('products_queryset')
+        if not queryset:
+            queryset = super().get_queryset()
+            cache.set('products_queryset', queryset, 60 * 15)
+        return queryset
+
+
+class ProductListViewByCategory(TemplateView):
+    """Products list by category"""
+    model = Product
+    template_name = 'list.pug'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = ProductService.get_list(self.kwargs.get('pk'))
+        context['category_id'] = self.kwargs.get('pk')
+        return context
+
 
 class ProductDetailView(DetailView):
     """Product detail"""
     model = Product
     template_name = 'product_detail.pug'
-
+    def get_context_data(self, **kwargs):
+        context = cache.get(f'product-{kwargs['object'].id}')
+        if not context:
+            context = super().get_context_data(**kwargs)
+        return context
 
 class ContactsView(TemplateView):
     """Contacts view"""
