@@ -29,6 +29,7 @@ class ProductListViewByCategory(TemplateView):
     """Products list by category"""
     model = Product
     template_name = 'list.pug'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = ProductService.get_list(self.kwargs.get('pk'))
@@ -40,15 +41,17 @@ class ProductDetailView(DetailView):
     """Product detail"""
     model = Product
     template_name = 'product_detail.pug'
+
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        key = f'product-cache-{kwargs['object'].id}'
+        key = f'product-{kwargs['object'].id}'
         product = cache.get(key)
         if not product:
-            cache.set(key, context['object'], 60 * 15)
+            context = super().get_context_data(**kwargs)
+            cache.set(key, context['product'], 60 * 15)
+            return context
         else:
-            context['product'] = product
-        return context
+            return {'product': Product.objects.get(pk=kwargs['object'].id)}
+
 
 class ContactsView(TemplateView):
     """Contacts view"""
@@ -76,12 +79,14 @@ class AboutView(TemplateView):
 
 class CatalogDeleteView(LoginRequiredMixin, DeleteView):
     """Products delete"""
+
     def post(self, request, pk):
         product = get_object_or_404(Product, id=pk)
         if product.owner == request.user or request.user.has_perm('catalog.can_delete_product'):
             product.delete()
             return redirect('catalog_list')
         return HttpResponseForbidden("У вас нет прав для удаления продукта.")
+
 
 class CatalogCreateView(LoginRequiredMixin, CreateView):
     """Add Product"""
