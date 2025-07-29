@@ -41,9 +41,13 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'product_detail.pug'
     def get_context_data(self, **kwargs):
-        context = cache.get(f'product-{kwargs['object'].id}')
-        if not context:
-            context = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        key = f'product-cache-{kwargs['object'].id}'
+        product = cache.get(key)
+        if not product:
+            cache.set(key, context['object'], 60 * 15)
+        else:
+            context['product'] = product
         return context
 
 class ContactsView(TemplateView):
