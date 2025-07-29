@@ -6,7 +6,7 @@ from users.models import User
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ['email', 'password']
+        fields = ['email']
 
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
@@ -18,8 +18,8 @@ class CustomUserCreationForm(UserCreationForm):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
         self.fields['email'].widget.attrs.update({'class':'form-control', 'placeholder':'Email'})
         #self.fields['password'].widget.attrs.update({'class':'form-control', 'placeholder':'Password'})
-        #self.fields['password1'].widget.attrs.update({'class':'form-control', 'placeholder':'Password. Why it doubles????'})
-        #self.fields['password2'].widget.attrs.update({'class':'form-control', 'placeholder':'Password confirm'})
+        self.fields['password1'].widget.attrs.update({'class':'form-control', 'placeholder':'Password. Why it doubles????'})
+        self.fields['password2'].widget.attrs.update({'class':'form-control', 'placeholder':'Password confirm'})
         #self.fields['phone'].widget.attrs.update({'class':'form-control', 'placeholder':'Phone'})
     #     self.fields['text'].widget.attrs.update({'class':'form-control', 'placeholder':'Text of post'})
 
